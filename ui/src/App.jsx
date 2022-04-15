@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 
 import { Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
@@ -27,9 +27,11 @@ import AppBarModules from "./plugins/AppBarModules";
 import CustomAppBarButtons from "./plugins/CustomAppBarButtons";
 import Workbench from "./pages/workbench/Workbench";
 
+import { Helmet } from "react-helmet";
+
 const useStyles = makeStyles((theme) => ({
   root: {
-    backgroundColor: "#efefef", // TODO: Use theme var
+    backgroundColor: "#efefef",
     display: "flex",
   },
   body: {
@@ -47,13 +49,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function App() {
-  const classes = useStyles();
+class AppAuth extends Component{
+  render(){
+    return (
+	  	<div>
+		  <Helmet>
+		    <script src="https://nubis1.int.d4science.net:8080/boot/d4s-boot.js"></script>
+		  </Helmet>
+		  <d4s-boot-2 url="https://accounts.dev.d4science.org/auth" redirect-url="http://localhost/login/callback" gateway="conductor-ui">
+		  </d4s-boot-2>
+		</div>
+	)
+  }
+}
 
-  return (
-    // Provide context for backward compatibility with class components
-    <div className={classes.root}>
-      <AppBar position="fixed">
+class AppBody extends Component{
+  constructor(props){
+	super(props)
+	this.state = { open : false }	 
+  }
+
+  setOpen(v){
+    this.setState({ open : v })
+  }
+
+  componentDidMount() {
+    document.addEventListener("authenticated", ev=>{
+      this.setOpen(true)
+    })
+  }
+  
+  render(){
+  	const classes = this.props.classes; 
+  	return !this.state.open ? <div></div> : (
+  	<div className={classes.root}>
+       <AppBar position="fixed">
         <Toolbar
           classes={{
             regular: classes.toolbarRegular,
@@ -130,5 +160,24 @@ export default function App() {
         </Switch>
       </div>
     </div>
-  );
+   )
+  }
+}
+
+class AppContent extends Component{
+  render(){
+	return( 
+		<div>
+			<AppAuth/>
+			<AppBody classes={this.props.classes}/>
+		</div>
+	)
+  }
+}
+
+//Keep functional constructor to avoid problems with useStyles
+export default function App() {
+  const classes = useStyles();
+
+  return <AppContent classes={classes}/>
 }
