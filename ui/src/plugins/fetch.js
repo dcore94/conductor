@@ -18,7 +18,9 @@ export function fetchWithContext(
   const newPath = `/api/${path}`;
   const cleanPath = newPath.replace(/([^:]\/)\/+/g, "$1"); // Cleanup duplicated slashes
 
-  return fetch(cleanPath, newParams)
+  const boot = document.querySelector("d4s-boot-2")
+
+  return boot.secureFetch(cleanPath, newParams)
     .then((res) => Promise.all([res, res.text()]))
     .then(([res, text]) => {
       if (!res.ok) {
