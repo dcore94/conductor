@@ -4,7 +4,7 @@ var config = {
   "pep-credentials" : "Z...=",
   "hosts" : [
     {
-      "host": "conductor",
+      "host": "conductor-dev.int.d4science.net",
       "audience" : "conductor-server",
       "allow-basic-auth" : true,
       "paths" : [
@@ -79,6 +79,16 @@ var config = {
             {
               "method" : "GET",
               "scopes" : ["poll"],
+            }
+          ]
+        },
+	{
+          "name" : "queue",
+          "path" : "^/api/tasks/queue/.+$",
+          "methods" : [
+            {
+              "method" : "GET",
+              "scopes" : ["get"],
             }
           ]
         },

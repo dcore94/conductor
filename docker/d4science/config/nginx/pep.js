@@ -158,7 +158,7 @@ function verifyToken(context){
 function requestToken(context){
   log(context, "Inside requestToken")
   var options = {
-    "body" : "grant_type=password&username="+context.authn.user+"&password="+context.authn.password
+    "body" : "grant_type=client_credentials&client_id="+context.authn.user+"&client_secret="+context.authn.password
   }
   return context.request.subrequest("/jwt_request", options)
     .then(reply=>{
