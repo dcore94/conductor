@@ -1,0 +1,42 @@
+#
+# Netflix conductor: Generate images for deployment of Server, protected UI and Nginx acting as router and pep to be deplyed on NW cluster  
+#
+# ===========================================================================================================
+# 0. Builder stage
+# ===========================================================================================================
+FROM openjdk:11-jdk AS builder
+LABEL maintainer="Nubisware <info@nubisware.com>"
+
+# Install Node
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN apt-get update -qq
+
+# Copy the project onto the builder image
+COPY . /conductor
+
+# Build the server
+WORKDIR /conductor
+RUN ./gradlew build -x test
+
+# ===========================================================================================================
+# 1. Generate container for Server
+# ===========================================================================================================
+
+FROM openjdk:11-jre AS conductor-server
+
+LABEL maintainer="Nubisware <info@nubisware.com>"
+
+# Make app folders
+RUN mkdir -p /app/config /app/logs /app/libs
+
+# Copy the compiled output to new image
+COPY --from=builder /conductor/docker/server/bin /app
+COPY --from=builder /conductor/server/build/libs/conductor-server-*-boot.jar /app/libs
+
+RUN chmod +x /app/startup.sh
+
+HEALTHCHECK --interval=60s --timeout=30s --retries=10 CMD curl -I -XGET http://localhost:8080/health || exit 1
+
+CMD [ "/app/startup.sh" ]
+ENTRYPOINT [ "/bin/sh"]
+

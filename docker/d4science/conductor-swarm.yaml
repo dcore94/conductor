@@ -1,0 +1,46 @@
+version: '3.6'
+
+services:
+  api:    
+    environment:
+      - CONFIG_PROP=config.properties
+    image: "conductor:server"
+    networks:
+      - conductor_network
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 120s
+    configs:
+      - source: conductor-server-config
+        target: /app/config/config.properties
+
+    logging:
+      driver: "journald"
+
+  frontend:
+    image: "conductor:ui"
+    networks:
+      - conductor_network
+    configs:
+      - source: frontend-config
+        target: /etc/nginx
+    deploy:
+      mode: replicated
+      replicas: 1 
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 120s
+
+networks:
+   conductor_network:
+
+configs:
+   conductor-server-config:
+     file: ./config/config.properties
+   frontend-config:
+     file: ./config/nginx/

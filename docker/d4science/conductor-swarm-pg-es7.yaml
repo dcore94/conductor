@@ -1,0 +1,37 @@
+version: '3.6'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=conductor
+      - POSTGRES_PASSWORD=conductor
+    networks:
+      - conductor_network 
+    healthcheck:
+      test: timeout 5 bash -c 'cat < /dev/null > /dev/tcp/localhost/5432'
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    logging:
+      driver: "journald"
+
+  es:
+    image: elasticsearch:7.6.2
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
+      - transport.host=0.0.0.0
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    networks:
+      - conductor_network 
+    healthcheck:
+      test: timeout 5 bash -c 'cat < /dev/null > /dev/tcp/localhost/9300'
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    logging:
+      driver: "journald"
+
+networks:
+   conductor_network:
