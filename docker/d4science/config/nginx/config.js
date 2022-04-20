@@ -1,7 +1,7 @@
 export default { config };
 
 var config = {
-  "pep-credentials" : "Z2N1YmUtcGVwOjAxOWMyYzNlLTUyNGUtNDhiZi1iODliLTllMjFmMDg1MjdlMA==",
+  "pep-credentials" : "Z...=",
   "hosts" : [
     {
       "host": "conductor",
