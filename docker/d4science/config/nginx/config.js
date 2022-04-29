@@ -1,7 +1,7 @@
 export default { config };
 
 var config = {
-  "pep-credentials" : "Z...=",
+  "pep-credentials" : "Z2N1YmUtcGVwOjAxOWMyYzNlLTUyNGUtNDhiZi1iODliLTllMjFmMDg1MjdlMA==",
   "hosts" : [
     {
       "host": "conductor-dev.int.d4science.net",
@@ -65,6 +65,24 @@ var config = {
             {
               "method" : "POST",
               "scopes" : ["start"],
+            },
+            {
+              "method" : "DELETE",
+              "scopes" : ["terminate"],
+            }
+          ]
+        },
+	{
+          "name" : "event",
+          "path" : "^/api/event/?.*$",
+          "methods" : [
+            {
+              "method" : "GET",
+              "scopes" : ["get"],
+            },
+            {
+              "method" : "POST",
+              "scopes" : ["create"],
             },
             {
               "method" : "DELETE",
