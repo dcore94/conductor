@@ -86,7 +86,11 @@ var config = {
             },
             {
               "method" : "DELETE",
-              "scopes" : ["terminate"],
+              "scopes" : ["delete"],
+            },
+	    {
+              "method" : "PUT",
+              "scopes" : ["update"],
             }
           ]
         },
@@ -117,6 +121,16 @@ var config = {
             {
               "method" : "POST",
               "scopes" : ["update"],
+            }
+          ]
+        },
+	{
+          "name" : "log",
+          "path" : "^/api/tasks/.+/log$",
+          "methods" : [
+            {
+              "method" : "GET",
+              "scopes" : ["get"],
             }
           ]
         }
