@@ -54,7 +54,7 @@ class AppAuth extends Component{
     return (
 	  	<div>
 		  <Helmet>
-		    <script src="https://nubis1.int.d4science.net:8080/boot/d4s-boot.js"></script>
+		    <script src="https://cdn.dev.d4science.org/boot/d4s-boot.js"></script>
 		  </Helmet>
 		  <d4s-boot-2 url="https://accounts.dev.d4science.org/auth" redirect-url="http://localhost/login/callback" gateway="conductor-ui">
 		  </d4s-boot-2>
